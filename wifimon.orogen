@@ -1,0 +1,28 @@
+name "wifimon"
+version "1.0"
+
+toolkit do
+    load "wifiTypes.h"
+end
+
+task_context "Monitor" do
+    # The monitor lists the wifi interfaces and creates the associated data
+    # ports on configuration
+    needs_configuration
+end
+
+static_deployment do
+    monitor = task('Monitor').
+        period(0.1).
+        start
+
+    # Create the data logger. The monitor task configures it and starts it by
+    # itself.
+    logger = data_logger
+    add_peers monitor, logger
+
+    unless corba_enabled?
+        browse monitor
+    end
+end
+
