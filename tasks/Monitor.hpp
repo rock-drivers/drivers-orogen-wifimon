@@ -2,7 +2,7 @@
 #define WIFIMON_MONITOR_TASK_HPP
 
 #include "wifimon/MonitorBase.hpp"
-#include <rtt/DataPort.hpp>
+#include <rtt/Ports.hpp>
 
 namespace wifimon {
     class Monitor : public MonitorBase
@@ -11,7 +11,7 @@ namespace wifimon {
 
     protected:
         int iw_com_fd;
-        typedef std::map<std::string, RTT::WriteDataPort<Status>*> OutMap;
+        typedef std::map<std::string, RTT::OutputPort<Status>*> OutMap;
         OutMap output_ports;
 
         bool configureHook();

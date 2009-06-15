@@ -22,7 +22,7 @@ int Monitor::createOutputPorts(int skfd, char *ifname, char *args[], int count)
 
     log(Info) << "monitoring " << ifname << endlog();
     Monitor* task = (Monitor*) args;
-    WriteDataPort<Status>* port =  new WriteDataPort<Status>(ifname);
+    OutputPort<Status>* port =  new OutputPort<Status>(ifname);
     task->output_ports.insert( make_pair(string(ifname), port));
     task->ports()->addPort(port);
     return 1;
@@ -49,7 +49,7 @@ int Monitor::updateOutputPorts(int skfd, char *ifname, char *args[], int count)
         return 1;
 
     Monitor* task = (Monitor*) args;
-    WriteDataPort<Status>* port = task->output_ports[ifname];
+    OutputPort<Status>* port = task->output_ports[ifname];
     if (! port)
     {
         log(Warning) << ifname << " is not monitored" << endlog();
@@ -91,7 +91,7 @@ int Monitor::updateOutputPorts(int skfd, char *ifname, char *args[], int count)
     }
 
 
-    port->Set(status);
+    port->write(status);
 
     return 1;
 }
