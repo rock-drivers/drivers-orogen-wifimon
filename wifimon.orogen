@@ -14,11 +14,7 @@ static_deployment do
         periodic(0.1).
         start
 
-    # Create the data logger. The monitor task configures it and starts it by
-    # itself.
-    logger = logger('wifimon.log')
-    add_peers monitor, logger
-
+    add_default_logger
     unless corba_enabled?
         browse monitor
     end
