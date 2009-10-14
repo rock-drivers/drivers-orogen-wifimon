@@ -1,6 +1,11 @@
 #ifndef WIFIMON_TYPES_HH
 #define WIFIMON_TYPES_HH
 
+#ifndef __orogen
+#include <stdint.h>
+#include <string.h>
+#endif
+
 namespace wifimon {
     struct Status {
         //! true if the interface is associated
