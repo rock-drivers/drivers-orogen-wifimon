@@ -10,7 +10,7 @@ task_context "Monitor" do
 end
 
 static_deployment do
-    monitor = task('Monitor').
+    monitor = task('wifi_monitor', 'Monitor').
         periodic(0.1).
         start
 
