@@ -6,8 +6,12 @@
 #include <string.h>
 #endif
 
+#include <base/time.h>
+
 namespace wifimon {
     struct Status {
+        base::Time time;
+
         //! true if the interface is associated
         uint8_t associated;
         //! the currently associate AP

@@ -1,6 +1,7 @@
 name "wifimon"
 version "1.0"
 
+import_types_from "base"
 import_types_from "wifiTypes.h"
 
 task_context "Monitor" do
