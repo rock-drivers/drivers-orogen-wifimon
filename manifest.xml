@@ -1,0 +1,13 @@
+<package>
+    <description brief="monitoring of the Wifi interfaces under Linux">
+    </description>
+    <author>Sylvain Joyeux/sylvain.joyeux@dfki.de</author>
+    <copyright>
+        DFKI/robotik@dfki.de
+    </copyright>
+    <license>LGPL v2 or later</license>
+
+    <depend package="base" />
+    <rosdep name="libiw" />
+</package>
+
