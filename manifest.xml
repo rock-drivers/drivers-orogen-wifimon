@@ -1,13 +1,16 @@
+<?xml version="1.0"?>
 <package>
-    <description brief="monitoring of the Wifi interfaces under Linux">
+  <description brief="monitoring of the Wifi interfaces under Linux">
     </description>
-    <author>Sylvain Joyeux/sylvain.joyeux@dfki.de</author>
-    <copyright>
+  <author>Sylvain Joyeux/sylvain.joyeux@dfki.de</author>
+  <copyright>
         DFKI/robotik@dfki.de
     </copyright>
-    <license>LGPL v2 or later</license>
-
-    <depend package="base" />
-    <rosdep name="libiw" />
+  <license>LGPL v2 or later</license>
+  <depend package="base"/>
+  <rosdep name="libiw"/>
+  <depend package="orocos/base"/>
+  <depend package="orocos/logger"/>
+  <depend package="orocos/orogen"/>
+  <depend package="orocos/rtt"/>
 </package>
-
