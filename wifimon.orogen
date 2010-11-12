@@ -8,9 +8,12 @@ task_context "Monitor" do
     # The monitor lists the wifi interfaces and creates the associated data
     # ports on configuration
     needs_configuration
+
+    dynamic_output_port(/.*/, '/wifimon/Status')
 end
 
-static_deployment do
+deployment "test_wifimon" do
+    do_not_install
     monitor = task('wifi_monitor', 'Monitor').
         periodic(0.1).
         start

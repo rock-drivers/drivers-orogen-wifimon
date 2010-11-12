@@ -17,15 +17,19 @@ int Monitor::createOutputPorts(int skfd, char *ifname, char *args[], int count)
     if(iw_get_basic_config(skfd, ifname, &(info.b)) < 0)
     {
         log(Info) << ifname << " is not a wireless interface" << endlog();
-        return 1;
+        return 1; // continue iterating in iw_enum_devices
     }
+    reinterpret_cast<Monitor*>(args)->startMonitoring(ifname);
+    return 1; // continue iterating in iw_enum_devices
+}
 
-    log(Info) << "monitoring " << ifname << endlog();
-    Monitor* task = (Monitor*) args;
+RTT::OutputPort<Status>* Monitor::startMonitoring(char* ifname)
+{
+    log(Info) << "starting to monitor" << ifname << endlog();
     OutputPort<Status>* port =  new OutputPort<Status>(ifname);
-    task->output_ports.insert( make_pair(string(ifname), port));
-    task->ports()->addPort(port);
-    return 1;
+    output_ports.insert( make_pair(string(ifname), port));
+    ports()->addPort(*port);
+    return port;
 }
 
 bool Monitor::configureHook()
@@ -46,18 +50,14 @@ int Monitor::updateOutputPorts(int skfd, char *ifname, char *args[], int count)
     wireless_info info;
     memset(&info, 0, sizeof(info));
     if(iw_get_basic_config(skfd, ifname, &(info.b)) < 0)
-        return 1;
+        return 1; // continue iterating in iw_enum_devices
 
-    Monitor* task = (Monitor*) args;
+    Monitor* task = reinterpret_cast<Monitor*>(args);
     OutputPort<Status>* port = task->output_ports[ifname];
     if (! port)
-    {
-        log(Warning) << ifname << " is not monitored" << endlog();
-        return 1;
-    }
+        port = task->startMonitoring(ifname);
 
     Status status;
-
     if(iw_get_range_info(skfd, ifname, &(info.range)) >= 0)
         info.has_range = 1;
 
@@ -90,10 +90,8 @@ int Monitor::updateOutputPorts(int skfd, char *ifname, char *args[], int count)
             info.stats.miss.beacon;
     }
 
-
     port->write(status);
-
-    return 1;
+    return 1; // continue iterating in iw_enum_devices
 }
 
 
@@ -102,11 +100,14 @@ void Monitor::updateHook()
     iw_enum_devices(iw_com_fd, &Monitor::updateOutputPorts, (char**)this, 0);
 }
 
-void Monitor::stopHook()
+void Monitor::cleanupHook()
 {
     while (!output_ports.empty())
     {
-        delete output_ports.begin()->second;
+        RTT::OutputPort<wifimon::Status>* out_port =
+            output_ports.begin()->second;
+        ports()->removePort(out_port->getName());
+        delete out_port;
         output_ports.erase(output_ports.begin());
     }
     iw_sockets_close(iw_com_fd);
