@@ -9,7 +9,7 @@
   <license>LGPL v2 or later</license>
 
   <depend package="libiw"/>
-  <depend package="modules/base"/>
-  <depend package="modules/logger"/>
+  <depend package="base/orogen/types"/>
+  <depend package="tools/logger"/>
   <depend package="orogen"/>
 </package>
