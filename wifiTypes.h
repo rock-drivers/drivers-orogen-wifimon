@@ -6,7 +6,7 @@
 #include <string.h>
 #endif
 
-#include <base/time.h>
+#include <base/Time.hpp>
 
 namespace wifimon {
     struct Status {
